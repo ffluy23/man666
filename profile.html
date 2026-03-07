@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>내 정보</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+
+<body onload="checkLogin(); updateCoinDisplay();">
+
+<script src="components/nav.js"></script>
+
+<div class="container">
+
+<h2>내 정보</h2>
+
+<p>닉네임 : <span id="nickname"></span></p>
+<p>보유 혼 : <span id="coin" class="coin"></span>H</p>
+<h3>인벤토리</h3>
+<div id="inventory"></div>
+
+
+</div>
+
+<script type="module" src="js/main.js"></script>
+</body>
+</html>
