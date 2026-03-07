@@ -50,31 +50,33 @@ async function loadUsers(){
 
     const div = document.createElement("div");
 
-    // 닉네임 + 코인
     const nickname = document.createElement("div");
-    nickname.innerText = `${data.nickname} (H:${data.coin})`;
+    nickname.innerText = `${data.nickname} (H:${data.coin || 0})`;
 
-    // inventory
     const inventoryDiv = document.createElement("div");
-    const inventory = data.inventory || [];
 
-    if(inventory.length === 0){
-        inventoryDiv.innerText = "아이템: 없음";
-    } else {
+    const inventory = data.inventory || {};
 
-        const itemNames = inventory.map(id=>{
-            return items[id]?.name || id;
-        });
+const entries = Object.entries(inventory).filter(([id,count]) => count > 0);
 
-        inventoryDiv.innerText = "아이템: " + itemNames.join(" ");
-    }
+if(entries.length === 0){
 
-    // 코인 입력
+    inventoryDiv.innerText = "아이템: 없음";
+
+}else{
+
+    const itemNames = entries.map(([id,count])=>{
+        const name = items[id]?.name || id;
+        return `${name} x${count}`;
+    });
+
+    inventoryDiv.innerText = "아이템: " + itemNames.join(" ");
+}
+
     const input = document.createElement("input");
     input.type = "number";
     input.placeholder = "코인";
 
-    // 지급 버튼
     const giveBtn = document.createElement("button");
     giveBtn.innerText = "지급";
 
@@ -84,7 +86,6 @@ async function loadUsers(){
         changeCoin(uid,amount);
     }
 
-    // 회수 버튼
     const takeBtn = document.createElement("button");
     takeBtn.innerText = "회수";
 
