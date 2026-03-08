@@ -9,37 +9,57 @@
 
 </head>
 
+<body>
 
 <script type="module" src="js/main.js"></script>
 <script src="components/nav.js"></script>
+<script type="module" src="js/slot.js"></script>
 
 <div class="container">
 
 <h2>슬롯머신</h2>
 
-<p>보유 혼 : <span id="coin" class="coin"></span>H</p>
-
+<p>보유 혼 : <span id="coin" class="coin">0</span>H</p>
 
 <div class="game-area">
 
 <div class="slot-display">
 
+<div class="reel">
+<div class="strip" id="strip0"></div>
+</div>
 
+<div class="reel">
+<div class="strip" id="strip1"></div>
+</div>
+
+<div class="reel">
+<div class="strip" id="strip2"></div>
 </div>
 
 </div>
 
+</div>
 
 <div class="game-controls">
 
-<button onclick="playSlot()">슬롯 돌리기 (50H)</button>
+베팅 :
+<input type="number" id="betAmount" value="50" min="10" step="10"> H
+
+<br><br>
+
+<button id="betBtn">베팅하기</button>
+<button id="cancelBtn">베팅 취소</button>
+<button id="startBtn">게임 시작</button>
 
 </div>
 
+<p>현재 베팅 : <span id="currentBet">0</span>H</p>
 
-<div class="result" id="result">
+<div class="result">
 
-결과 표시
+배수 : <span id="multiplier">0</span>x<br>
+획득 : <span id="reward">0</span>H
 
 </div>
 
