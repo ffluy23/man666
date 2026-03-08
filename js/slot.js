@@ -1,5 +1,8 @@
 import { startGame, finishGame, placeBet, cancelBet } from "./game.js";
 
+/* 게임 상태 */
+window.gameRunning = false;
+
 /* 확률 릴 */
 const reel = [
 "🍒","🍒","🍒","🍒","🍒","🍒",
@@ -24,7 +27,7 @@ function randSymbol(){
 return SYMBOLS[Math.floor(Math.random()*SYMBOLS.length)]
 }
 
-/* 릴 생성  */
+/* 릴 생성 */
 function buildStrip(strip, finalSymbol){
 
 strip.innerHTML=""
@@ -89,8 +92,13 @@ requestAnimationFrame(frame)
 
 async function startSlot(){
 
+/* 게임 중이면 시작 불가 */
+if(window.gameRunning) return
+
 const bet=await startGame()
 if(!bet) return
+
+window.gameRunning = true
 
 document.getElementById("multiplier").textContent="-"
 document.getElementById("reward").textContent="-"
@@ -120,12 +128,23 @@ buildStrip(strips[0],results[0])
 buildStrip(strips[1],results[1])
 buildStrip(strips[2],results[2])
 
-/* 릴 애니메이션 */
-await Promise.all([
-animate(strips[0], -(ITEM_HEIGHT * SPIN_ITEMS), 1200),
-animate(strips[1], -(ITEM_HEIGHT * SPIN_ITEMS), 1500),
-animate(strips[2], -(ITEM_HEIGHT * SPIN_ITEMS), 1800)
-])
+const dist = -(ITEM_HEIGHT * SPIN_ITEMS)
+
+const spin1 = animate(strips[0], dist, 1200)
+const spin2 = animate(strips[1], dist, 1500)
+const spin3 = animate(strips[2], dist, 1800)
+
+await spin1
+await animate(strips[0], dist - 12, 120)
+await animate(strips[0], dist, 120)
+
+await spin2
+await animate(strips[1], dist - 12, 120)
+await animate(strips[1], dist, 120)
+
+await spin3
+await animate(strips[2], dist - 12, 120)
+await animate(strips[2], dist, 120)
 
 await new Promise(r=>setTimeout(r,50))
 
@@ -134,7 +153,6 @@ let multiplier = 0
 
 const cherryCount = results.filter(s => s === "🍒").length
 
-/* 체리 보너스 */
 if (cherryCount > 0) {
 
 if (cherryCount === 3) multiplier = 5
@@ -143,7 +161,6 @@ else if (cherryCount === 1) multiplier = 0.5
 
 }
 
-/* 체리가 하나도 없을 때만 일반 배당 */
 else if(results[0]===results[1] && results[1]===results[2]){
 
 const s=results[0]
@@ -168,13 +185,27 @@ console.log("reward:",reward)
 
 await finishGame("slot",bet,reward)
 
+/* 게임 종료 */
+window.gameRunning = false
+
 }
 
 document.addEventListener("DOMContentLoaded",()=>{
 
 document.getElementById("betBtn").addEventListener("click",placeBet)
-document.getElementById("cancelBtn").addEventListener("click",cancelBet)
-document.getElementById("startBtn").addEventListener("click",startSlot)
+
+/* 게임 중 취소 방지 */
+document.getElementById("cancelBtn").addEventListener("click",()=>{
+
+if(window.gameRunning){
+alert("게임 진행 중에는 취소 불가")
+return
+}
+
+cancelBet()
 
 })
 
+document.getElementById("startBtn").addEventListener("click",startSlot)
+
+})
