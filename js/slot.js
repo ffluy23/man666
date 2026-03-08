@@ -24,7 +24,7 @@ function randSymbol(){
 return SYMBOLS[Math.floor(Math.random()*SYMBOLS.length)]
 }
 
-/* 릴 생성 (마지막에 결과 심볼 넣기) */
+/* 릴 생성 */
 function buildStrip(strip, finalSymbol){
 
 strip.innerHTML=""
