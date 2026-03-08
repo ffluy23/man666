@@ -1,20 +1,60 @@
 <!DOCTYPE html>
 <html>
+
 <head>
 <meta charset="UTF-8">
 <title>야바위</title>
 <link rel="stylesheet" href="css/style.css">
 </head>
 
-<body onload="checkLogin(); updateCoinDisplay();">
+<body class="shellgame-page" onload="checkLogin(); updateCoinDisplay();">
 
+<script type="module" src="js/main.js"></script>
 <script src="components/nav.js"></script>
+<script type="module" src="js/shellgame.js"></script>
 
 <div class="container">
 
-	
+<h2>야바위 게임</h2>
+
+<div class="game-controls">
+
+보유 혼 :
+<span id="coin" class="coin">0</span>H
+
+<br><br>
+
+베팅 :
+<input type="number" id="betAmount" value="10" min="1" max="20"> H
+
+<br><br>
+
+<button onclick="placeBet()">베팅하기</button>
+<button onclick="cancelBet()">베팅 취소</button>
+<button id="startBtn">Start</button>
+
 </div>
 
-<script type="module" src="js/main.js"></script>
+<p>
+현재 베팅 :
+<span id="currentBet">0</span>H
+</p>
+
+<hr>
+
+<div class="game-info">
+<div>상태 : <span id="phase">대기</span></div>
+<div id="msg">게임 시작</div>
+</div>
+
+<div class="stats">
+라운드 : <span id="round">0</span>
+</div>
+
+<div id="lane" class="lane"></div>
+
+
+</div>
+
 </body>
 </html>
