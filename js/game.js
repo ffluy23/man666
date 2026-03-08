@@ -107,6 +107,11 @@ console.error("placeBet error:", e);
 // 베팅 취소
 export async function cancelBet(){
 
+if(window.gameRunning){
+alert("게임 진행 중에는 베팅 취소 불가");
+return;
+}
+
 const user = auth.currentUser;
 if(!user) return;
 
