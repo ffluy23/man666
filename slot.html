@@ -1,69 +1,82 @@
 <!DOCTYPE html>
 <html>
 <head>
-
-<meta charset="UTF-8">
-<title>슬롯머신</title>
-
-<link rel="stylesheet" href="css/style.css">
-
+  <meta charset="UTF-8">
+  <title>슬롯머신</title>
+  <link rel="stylesheet" href="css/style.css">
 </head>
 
-<body>
+<body class="slot-page">
 
-<script type="module" src="js/main.js"></script>
-<script src="components/nav.js"></script>
-<script type="module" src="js/slot.js"></script>
+  <script type="module" src="js/main.js"></script>
+  <script src="components/nav.js"></script>
+  <script type="module" src="js/slot.js"></script>
 
-<div class="container">
+  <div class="container">
+    <div class="game-area">
 
-<h2>슬롯머신</h2>
+      <h2>🎰 슬롯머신</h2>
 
-<p>보유 혼 : <span id="coin" class="coin">0</span>H</p>
+      <div class="info-row">
+        <div class="game-controls">
+          <div class="rowui">
 
-<div class="game-area">
+            <div class="stat">
+              <div class="k">보유 혼</div>
+              <div class="v">
+                <span id="coin" class="coin">0</span>H
+              </div>
+            </div>
 
-<div class="slot-display">
+            <div class="stat">
+              <div class="k">현재 베팅</div>
+              <div class="v">
+                <span id="currentBet">0</span>H
+              </div>
+            </div>
 
-<div class="reel">
-<div class="strip" id="strip0"></div>
-</div>
+            <div class="stat">
+              <div class="result">
+                <div class="k">
+                  배수: <span id="multiplier">0</span>x
+                </div>
+                <div class="v">
+                  획득: <span id="reward">0</span>H
+                </div>
+              </div>
+            </div>
 
-<div class="reel">
-<div class="strip" id="strip1"></div>
-</div>
+          </div>
+        </div>
+      </div>
 
-<div class="reel">
-<div class="strip" id="strip2"></div>
-</div>
+      <div class="slot-display">
 
-</div>
+        <div class="reel">
+          <div class="strip" id="strip0"></div>
+        </div>
 
-</div>
+        <div class="reel">
+          <div class="strip" id="strip1"></div>
+        </div>
 
-<div class="game-controls">
+        <div class="reel">
+          <div class="strip" id="strip2"></div>
+        </div>
 
-베팅 :
-<input type="number" id="betAmount" value="0" min="10" step="10"> H
+      </div>
+ <button id="startBtn" class="slotstart">Go</button>
+      <div class="bet-row">
+        베팅 :
+        <input type="number" id="betAmount" value="10" min="10" step="10"> H
+        <button id="betBtn">베팅하기</button>
+        <button id="cancelBtn">베팅 취소</button>
+      </div>
 
-<br><br>
+     
 
-<button id="betBtn">베팅하기</button>
-<button id="cancelBtn">베팅 취소</button>
-<button id="startBtn">게임 시작</button>
-
-</div>
-
-<p>현재 베팅 : <span id="currentBet">0</span>H</p>
-
-<div class="result">
-
-배수 : <span id="multiplier">0</span>x<br>
-획득 : <span id="reward">0</span>H
-
-</div>
-
-</div>
+    </div>
+ </div>
 
 </body>
 </html>
