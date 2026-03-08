@@ -1,6 +1,6 @@
 import { startGame, finishGame, placeBet, cancelBet } from "./game.js";
 
-/* 릴 */
+/* 확률 릴 */
 const reel = [
 "🍒","🍒","🍒","🍒","🍒","🍒",
 "🍋","🍋","🍋","🍋","🍋",
