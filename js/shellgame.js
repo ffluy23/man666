@@ -1,288 +1,211 @@
-import { startGame, finishGame } from "./game.js";
+import { startGame, finishGame, placeBet, cancelBet } from "./game.js";
 
-const CONFIG = {
-      revealMs: 900,
-      coverDelayMs: 250,
-      shuffleMoves: 8,
-      swapMs: 300,
-      betweenSwapsMs: 120,
-    };
+/* 게임 상태 */
+window.gameRunning = false;
 
-const MULTIPLIERS = [1, 1.2, 1.5, 1.7, 2];
-const MAX_ROUND = 5;
+/* 확률 릴 */
+const reel = [
+"🍒","🍒","🍒","🍒","🍒","🍒",
+"🍋","🍋","🍋","🍋","🍋",
+"🍇","🍇","🍇","🍇",
+"🍉","🍉","🍉",
+"🔔","🔔",
+"⭐",
+"7️⃣"
+]
 
-const lane = document.getElementById('lane');
-const startBtn = document.getElementById('startBtn');
-const phaseEl = document.getElementById('phase');
-const msgEl = document.getElementById('msg');
-const roundEl = document.getElementById('round');
-
-let currentBet = 0;
-let totalWin = 0;
-
-let phase = 'idle';
-let round = 0;
-
-const SLOT_X = [60, 300, 540];
-const cups = [];
-let ballCupId = 0;
-let allowClick = false;
-
-const sleep = (ms) => new Promise(r => setTimeout(r, ms));
-
-function setPhase(p, message){
-  phase = p;
-  phaseEl.textContent = ({
-    idle:'대기', reveal:'확인', cover:'덮는 중', shuffle:'섞는 중', guess:'맞추기', result:'결과'
-  }[p] || p);
-
-  if(message) msgEl.textContent = message;
-
-  startBtn.disabled = !(p === 'idle' || p === 'result');
+function spin(){
+return reel[Math.floor(Math.random()*reel.length)]
 }
 
-function renderCounters(){
-  roundEl.textContent = String(round);
+const SYMBOLS = ["🍒","🍋","🍇","🍉","🔔","⭐","7️⃣"]
+
+const ITEM_HEIGHT = 140
+const SPIN_ITEMS = 20
+
+function randSymbol(){
+return SYMBOLS[Math.floor(Math.random()*SYMBOLS.length)]
 }
 
-function createCup(id, slot){
-  const el = document.createElement('div');
-  el.className = 'cup covered';
-  el.dataset.id = String(id);
-  el.dataset.slot = String(slot);
+/* 릴 생성 */
+function buildStrip(strip, finalSymbol){
 
-  const ball = document.createElement('div');
-  ball.className = 'ball';
+strip.innerHTML=""
 
-  const lid = document.createElement('div');
-  lid.className = 'lid';
-
-  el.appendChild(ball);
-  el.appendChild(lid);
-
-  el.style.transform = `translateX(${SLOT_X[slot]}px)`;
-
-  el.addEventListener('click', () => onCupClick(id));
-
-  lane.appendChild(el);
-
-  return { id, slot, el, ball };
+for(let i=0;i<SPIN_ITEMS;i++){
+const d=document.createElement("div")
+d.className="symbol"
+d.textContent=randSymbol()
+strip.appendChild(d)
 }
 
-function init(){
-  lane.innerHTML = '';
-  cups.length = 0;
+const last=document.createElement("div")
+last.className="symbol"
+last.textContent=finalSymbol
+strip.appendChild(last)
 
-  for(let i=0;i<3;i++){
-    cups.push(createCup(i, i));
-  }
-
-  ballCupId = Math.floor(Math.random()*3);
-
-  allowClick = false;
-
-  setPhase('idle', '게임 시작');
-
-  renderCupsCover(true);
-  showBall(ballCupId, false);
-
-  renderCounters();
 }
 
-function renderCupsCover(covered){
-  for(const c of cups){
-    c.el.classList.toggle('covered', covered);
-  }
+/* easing */
+function easeOut(t){
+return 1-Math.pow(1-t,3)
 }
 
-function showBall(cupId, show){
-  for(const c of cups){
-    c.el.classList.remove('show-ball');
+/* 현재 translateY */
+function getTranslate(el){
 
-    if(show && c.id === cupId){
-      c.el.classList.add('show-ball');
-    }
-  }
+let st=getComputedStyle(el).transform
+
+if(st==="none") return 0
+
+let m=st.match(/matrix([^)]+)/)
+
+return m?parseFloat(m[1].split(",")[5]):0
+
 }
 
-function revealBall(cupId){
-  for(const c of cups){
-    c.el.classList.remove('reveal');
-  }
+/* 릴 애니메이션 */
+function animate(strip,distance,duration){
 
-  const c = cups.find(x => x.id === cupId);
+return new Promise(resolve=>{
 
-  if(c) c.el.classList.add('reveal');
+let start=performance.now()
+let from=getTranslate(strip)
+
+function frame(now){
+
+let t=Math.min(1,(now-start)/duration)
+let y=from+(distance-from)*easeOut(t)
+
+strip.style.transform = `translateY(${y}px)`
+
+if(t<1) requestAnimationFrame(frame)
+else resolve()
+
 }
 
-function disableCups(disabled){
-  for(const c of cups){
-    c.el.classList.toggle('disabled', disabled);
-  }
+requestAnimationFrame(frame)
+
+})
+
 }
 
-function setCupSlot(id, newSlot){
-  const c = cups.find(x=>x.id===id);
+async function startSlot(){
 
-  c.slot = newSlot;
-  c.el.dataset.slot = String(newSlot);
-  c.el.style.transform = `translateX(${SLOT_X[newSlot]}px)`;
+/* 게임 중 감지 */
+if(window.gameRunning) return
+
+const bet=await startGame()
+if(!bet) return
+
+window.gameRunning = true
+
+document.getElementById("multiplier").textContent="-"
+document.getElementById("reward").textContent="-"
+
+const strips=[
+document.getElementById("strip0"),
+document.getElementById("strip1"),
+document.getElementById("strip2")
+]
+
+/* 위치 초기화 */
+strips.forEach(strip=>{
+strip.style.transform="translateY(0)"
+})
+
+/* 결과 결정 */
+const results=[
+spin(),
+spin(),
+spin()
+]
+
+console.log("result:",results)
+
+/* 릴 생성 */
+buildStrip(strips[0],results[0])
+buildStrip(strips[1],results[1])
+buildStrip(strips[2],results[2])
+
+const dist = -(ITEM_HEIGHT * SPIN_ITEMS)
+
+const spin1 = animate(strips[0], dist, 1200)
+const spin2 = animate(strips[1], dist, 1500)
+const spin3 = animate(strips[2], dist, 1800)
+
+await spin1
+await animate(strips[0], dist - 12, 120)
+await animate(strips[0], dist, 120)
+
+await spin2
+await animate(strips[1], dist - 12, 120)
+await animate(strips[1], dist, 120)
+
+await spin3
+await animate(strips[2], dist - 12, 120)
+await animate(strips[2], dist, 120)
+
+await new Promise(r=>setTimeout(r,50))
+
+/* 배수 계산 */
+let multiplier = 0
+
+const cherryCount = results.filter(s => s === "🍒").length
+
+if (cherryCount > 0) {
+
+if (cherryCount === 3) multiplier = 5
+else if (cherryCount === 2) multiplier = 1
+else if (cherryCount === 1) multiplier = 0.5
+
 }
 
-function swapSlots(slotA, slotB){
-  const cupA = cups.find(c => Number(c.el.dataset.slot) === slotA);
-  const cupB = cups.find(c => Number(c.el.dataset.slot) === slotB);
+else if(results[0]===results[1] && results[1]===results[2]){
 
-  if(!cupA || !cupB) return;
+const s=results[0]
 
-  setCupSlot(cupA.id, slotB);
-  setCupSlot(cupB.id, slotA);
+if(s==="🍋") multiplier=6
+else if(s==="🍇") multiplier=10
+else if(s==="🍉") multiplier=18
+else if(s==="🔔") multiplier=35
+else if(s==="⭐") multiplier=70
+else if(s==="7️⃣") multiplier=120
+
 }
 
-function currentBallSlot(){
-  return Number(cups.find(c=>c.id===ballCupId).el.dataset.slot);
+const reward=bet*multiplier
+
+document.getElementById("multiplier").textContent=multiplier
+document.getElementById("reward").textContent=reward
+
+console.log("bet:",bet)
+console.log("multiplier:",multiplier)
+console.log("reward:",reward)
+
+await finishGame("slot",bet,reward)
+
+/* 게임 종료 */
+window.gameRunning = false
+
 }
 
-function resetCupState(){
-  for(const c of cups){
-    c.el.classList.remove('reveal','show-ball','flash','bad');
-    c.el.classList.add('covered');
-  }
+document.addEventListener("DOMContentLoaded",()=>{
+
+document.getElementById("betBtn").addEventListener("click",placeBet)
+
+/* 게임 중 취소 방지 */
+document.getElementById("cancelBtn").addEventListener("click",()=>{
+
+if(window.gameRunning){
+alert("게임 진행 중에는 취소 불가")
+return
 }
 
-async function runRound(){
+cancelBet()
 
-  resetCupState(); 
+})
 
-  if(round >= MAX_ROUND){
-    await finishGame("shellgame", currentBet, totalWin);
-    setPhase('idle','게임 종료');
-    return;
-  }
+document.getElementById("startBtn").addEventListener("click",startSlot)
 
-  round += 1;
-  renderCounters();
-
-  allowClick = false;
-  disableCups(true);
-
-  ballCupId = Math.floor(Math.random()*3);
-
-  setPhase('reveal','공의 위치를 기억하세요.');
-
-  renderCupsCover(false);
-  showBall(ballCupId, true);
-
-  await sleep(CONFIG.revealMs);
-
-  setPhase('cover');
-
-  showBall(ballCupId, false);
-  await sleep(CONFIG.coverDelayMs);
-
-  renderCupsCover(true);
-
-  setPhase('shuffle','섞는 중');
-
-  await shuffleSequence(CONFIG.shuffleMoves);
-
-  setPhase('guess','컵 선택');
-
-  allowClick = true;
-  disableCups(false);
-}
-
-async function shuffleSequence(moves){
-
-  const PAIRS = [[0,1],[1,2],[0,2]];
-
-  for(let i=0;i<moves;i++){
-
-    const [a,b] = PAIRS[Math.floor(Math.random()*PAIRS.length)];
-
-    swapSlots(a,b);
-
-    await sleep(CONFIG.swapMs + CONFIG.betweenSwapsMs);
-  }
-}
-
-async function onCupClick(cupId){
-
-  if(!allowClick || phase !== 'guess') return;
-
-  allowClick = false;
-  disableCups(true);
-
-  const chosenSlot = Number(cups.find(c=>c.id===cupId).el.dataset.slot);
-  const realSlot = currentBallSlot();
-
-setPhase('result','결과 공개');
-
-renderCupsCover(false);
-showBall(ballCupId, true);   
-revealBall(ballCupId);
-
-  const ok = chosenSlot === realSlot;
-
-  if(!ok){
-
-
-    msgEl.textContent = `틀림! 전부 잃었습니다.`;
-
-    await finishGame("shellgame", currentBet, 0);
-
-    renderCounters();
-
-    return;
-  }
-
-
-  const multiplier = MULTIPLIERS[round-1];
-
-  totalWin = Math.floor(currentBet * multiplier);
-
-  msgEl.textContent = `성공! x${multiplier}`;
-
-  renderCounters();
-
-  if(round >= MAX_ROUND){
-
-    await finishGame("shellgame", currentBet, totalWin);
-
-    msgEl.textContent += " 최종 성공!";
-
-    return;
-  }
-
-  const go = confirm(`현재 상금 ${totalWin}\n계속 하시겠습니까?`);
-
-  if(go){
-
-    await sleep(800);
-
-    runRound();
-
-  }else{
-
-    await finishGame("shellgame", currentBet, totalWin);
-
-    msgEl.textContent = `STOP! ${totalWin} 획득`;
-  }
-}
-
-startBtn.addEventListener('click', async () => {
-
-  if(!(phase === 'idle' || phase === 'result')) return;
-
-  const bet = await startGame();
-
-  if(!bet) return;
-
-  currentBet = bet;
-  totalWin = 0;
-  round = 0;
-
-  runRound();
-});
-
-init();
+})
