@@ -1,71 +1,18 @@
 @font-face {
-    font-family: 'Hamlet';
-    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2110@1.0/Hahmlet-Thin.woff2') format('woff2');
-    font-weight: 100;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'Hamlet';
-    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2110@1.0/Hahmlet-ExtraLight.woff2') format('woff2');
-    font-weight: 200;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'Hamlet';
-    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2110@1.0/Hahmlet-Light.woff2') format('woff2');
-    font-weight: 300;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'Hamlet';
-    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2110@1.0/Hahmlet-Regular.woff2') format('woff2');
+    font-family: 'GabiaMaeumgyeol';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2205@1.0/GabiaMaeumgyeol.woff2') format('woff2');
     font-weight: normal;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'Hamlet';
-    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2110@1.0/Hahmlet-SemiBold.woff2') format('woff2');
-    font-weight: 600;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'Hamlet';
-    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2110@1.0/Hahmlet-Bold.woff2') format('woff2');
-    font-weight: 700;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'Hamlet';
-    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2110@1.0/Hahmlet-ExtraBold.woff2') format('woff2');
-    font-weight: 800;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'Hamlet';
-    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2110@1.0/Hahmlet-Black.woff2') format('woff2');
-    font-weight: 900;
     font-display: swap;
 }
 
 body{
     margin:0;
-    font-family:Hamlet, sans-serif;
-    background:#f5f5f5;
+    font-family:'GabiaMaeumgyeol', sans-serif;
+    background:#030303;
+	color:#f5f5f5;
 }
 
 /* 전체 화면 기본 설정 */
-body.login {
-    margin: 0;
-    font-family: Hamlet, sans-serif;
-    background:#f5f5f5;
-}
 
 .login .container {
     display: flex;
@@ -165,11 +112,18 @@ body.login {
 
 /* 카지노 타일 */
 
+.casino-page .container{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+}
+
 .game-grid{
     display:grid;
     grid-template-columns:1fr 1fr;
     gap:30px;
     max-width:600px;
+	
 }
 
 .game-tile{
@@ -180,6 +134,7 @@ body.login {
     font-size:20px;
     cursor:pointer;
     transition:0.2s;
+	color:#333;
 }
 
 .game-tile:hover{
@@ -202,42 +157,354 @@ body.login {
 	transform:scale(1.05);
 }
 
-/* 슬롯머신 */
-.slot-display{
-display:flex;
-justify-content:center;
-align-items:center;
-gap:20px;
-margin:20px 0;
+/* 슬롯머신 페이지 */
+.slot-page .container{
+  min-height:70vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:10px;
 }
 
+/* 메인 카드 */
+.game-area{
+  background:#1b1326;
+  border-radius:20px;
+  padding:28px;
+  box-shadow:0 12px 30px rgba(0,0,0,0.6);
+  border:2px solid #3a254f;
+}
+
+/* 제목 */
+.game-area h2{
+  text-align:center;
+  color:#ff9de6;
+  margin-bottom:18px;
+  letter-spacing:1px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+/* 슬롯 영역 */
+.slot-display{
+  display:flex;
+  gap:14px;
+  justify-content:center;
+  margin:24px 0;
+  position:relative;
+}
+
+.slot-display::after{
+  content:"";
+  position:absolute;
+  width:100%;
+  height:2px;
+  background:#ff9de644;
+  top:50%;
+  left:0;
+}
+
+/* 정보 카드 */
+.rowui{
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+  justify-content:center;
+}
+
+.stat{
+  flex:1;
+  min-width:150px;
+  padding:14px;
+  border-radius:14px;
+  background:#241734;
+  border:1px solid #4a2d68;
+  box-shadow:0 0 8px rgba(255,120,220,0.15);
+}
+
+.stat .k{
+  font-size:12px;
+  color:#caa8ff;
+  margin-bottom:6px;
+}
+
+.stat .v{
+  font-size:24px;
+  font-weight:700;
+  color:#fff;
+}
+
+/* 슬롯 릴 */
 .reel{
-width:120px;
-height:140px;
-overflow:hidden;
-border:3px solid #333;
-border-radius:10px;
-background:#111;
-position:relative;
+  width:120px;
+  height:140px;
+  overflow:hidden;
+  border-radius:16px;
+  background:#12091c;
+  border:2px solid #5b3a7e;
+  box-shadow:
+    inset 0 0 10px rgba(0,0,0,0.8),
+    0 0 10px rgba(255,120,220,0.2);
 }
 
 .strip{
-position:absolute;
-top:0;
-left:0;
-width:100%;
-transform:translateY(0);
-display:flex;
-flex-direction:column;
+  display:flex;
+  flex-direction:column;
 }
 
 .symbol{
-width:100%;
-height:140px;
-display:flex;
-align-items:center;
-justify-content:center;
-font-size:60px;
-flex-shrink:0;
+  width:100%;
+  height:140px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:60px;
+  flex-shrink:0;
 }
 
+/* 시작 버튼 */
+.slotstart{
+  display:block;
+  margin:20px auto;
+  background:linear-gradient(180deg,#ff9de6,#ff6bcf);
+  color:#2a0f2a;
+  padding:14px 20px;
+  border:none;
+  border-radius:14px;
+  font-weight:700;
+  font-size: 18px;
+  width:100%;
+  cursor:pointer;
+  transition:.15s;
+  box-shadow:0 6px 15px rgba(255,120,220,0.4);
+}
+
+.slotstart:hover{
+  transform:translateY(-2px);
+  box-shadow:0 10px 20px rgba(255,120,220,0.6);
+}
+
+/* 베팅 영역 */
+.bet-row{
+  margin-top:16px;
+  text-align:center;
+  color:#e6c8ff;
+}
+
+.bet-row input{
+  padding:6px 8px;
+  border-radius:8px;
+  border:1px solid #5b3a7e;
+  background:#1a1026;
+  color:white;
+}
+
+.bet-row button{
+  padding:6px 10px;
+  border-radius:8px;
+  border:1px solid #5b3a7e;
+  background:#2a173a;
+  color:#ffd0ff;
+  cursor:pointer;
+}
+
+.bet-row button:hover{
+  background:#3b2053;
+}
+
+.rules-box{
+  padding: 20px;
+  margin-top: 10px;
+  border-radius: 10px;
+  min-height: 150px;
+  background:#12091c;
+  border:2px solid #5b3a7e;
+  box-shadow:
+ 	 inset 0 0 10px rgba(0,0,0,0.8),
+        0 0 10px rgba(255,120,220,0.2);
+	
+}
+
+/* 야바위 */
+
+/* 페이지 배경 */
+.shellgame-page{
+  background:linear-gradient(180deg,#1a1024,#0f0718);
+  font-family:"GabiaMaeumgyeol","Noto Sans KR",sans-serif;
+  color:white;
+}
+
+.shellgame-page .container{
+  max-width:760px;
+  margin:auto;
+  padding:30px;
+  background:#1b1326;
+  border-radius:20px;
+  border:2px solid #3a254f;
+  box-shadow:0 12px 30px rgba(0,0,0,0.6);
+}
+
+/* 제목 */
+.shellgame-page h2{
+  text-align:center;
+  color:#ff9de6;
+  margin-bottom:20px;
+}
+
+/* ===== 컨트롤 영역 ===== */
+
+.game-controls{
+  background:#241734;
+  border:1px solid #4a2d68;
+  padding:16px;
+  border-radius:14px;
+  text-align:center;
+  box-shadow:0 0 10px rgba(255,120,220,0.15);
+}
+
+.game-controls input{
+  background:#1a1026;
+  border:1px solid #5b3a7e;
+  border-radius:8px;
+  padding:6px 8px;
+  color:white;
+  width:70px;
+}
+
+/* 버튼 */
+
+.game-controls button,
+.controls button{
+  background:linear-gradient(180deg,#ff9de6,#ff6bcf);
+  border:none;
+  padding:8px 14px;
+  margin:4px;
+  border-radius:10px;
+  font-weight:700;
+  color:#2a0f2a;
+  cursor:pointer;
+  transition:.15s;
+  box-shadow:0 4px 10px rgba(255,120,220,0.4);
+}
+
+.game-controls button:hover,
+.controls button:hover{
+  transform:translateY(-2px);
+  box-shadow:0 8px 16px rgba(255,120,220,0.6);
+}
+
+/* ===== 정보 ===== */
+
+.game-info{
+  text-align:center;
+  margin-top:16px;
+  padding:12px;
+  background:#241734;
+  border-radius:12px;
+  border:1px solid #4a2d68;
+}
+
+.stats{
+  text-align:center;
+  margin:10px 0 20px 0;
+  color:#e6c8ff;
+}
+
+/* ===== 컵 영역 ===== */
+
+.lane{
+  position:relative;
+  height:180px;
+  margin-top:20px;
+  background:#12091c;
+  border-radius:16px;
+  border:1px solid #4a2d68;
+}
+
+/* 컵 */
+
+.cup{
+  position:absolute;
+  bottom:20px;
+  width:110px;
+  height:120px;
+  cursor:pointer;
+  transition:transform 300ms ease;
+}
+
+/* 컵 뚜껑 */
+
+.lid{
+  width:100%;
+  height:100%;
+  border-radius:14px 14px 20px 20px;
+  background:linear-gradient(180deg,#5b3a7e,#2b1740);
+  border:2px solid #8c5ac5;
+  box-shadow:
+    inset 0 -6px 10px rgba(0,0,0,0.6),
+    0 0 10px rgba(255,120,220,0.25);
+}
+
+/* 공 */
+
+.ball{
+  position:absolute;
+  bottom:10px;
+  left:50%;
+  transform:translateX(-50%);
+  width:28px;
+  height:28px;
+  border-radius:50%;
+  background:radial-gradient(circle,#ff9de6,#ff4ec7);
+  box-shadow:0 0 10px rgba(255,120,220,0.8);
+  opacity:0;
+}
+
+/* 공 보여줄 때 */
+
+.cup.show-ball .ball{
+  opacity:1;
+}
+
+/* 컵 들어올림 */
+
+.cup.reveal .lid{
+  transform:translateY(-60px);
+}
+
+/* 덮여있을 때 */
+
+.cup.covered .lid{
+  transform:translateY(0);
+}
+
+/* 클릭 비활성 */
+
+.cup.disabled{
+  pointer-events:none;
+  opacity:0.7;
+}
+
+/* 정답 효과 */
+
+.flash .lid{
+  box-shadow:
+    0 0 20px #ff9de6,
+    inset 0 -6px 10px rgba(0,0,0,0.6);
+}
+
+/* 오답 효과 */
+
+.bad .lid{
+  box-shadow:
+    0 0 18px #ff4e7a,
+    inset 0 -6px 10px rgba(0,0,0,0.6);
+}
+
+/* 리셋 버튼 영역 */
+
+.controls{
+  text-align:center;
+  margin-top:20px;
+}
