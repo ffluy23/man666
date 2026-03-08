@@ -1,6 +1,6 @@
 import { startGame, finishGame, placeBet, cancelBet } from "./game.js";
 
-/* 확률 릴 */
+/* 릴 */
 const reel = [
 "🍒","🍒","🍒","🍒","🍒","🍒",
 "🍋","🍋","🍋","🍋","🍋",
@@ -24,7 +24,7 @@ function randSymbol(){
 return SYMBOLS[Math.floor(Math.random()*SYMBOLS.length)]
 }
 
-/* 릴 생성 */
+/* 릴 생성  */
 function buildStrip(strip, finalSymbol){
 
 strip.innerHTML=""
@@ -122,27 +122,38 @@ buildStrip(strips[2],results[2])
 
 /* 릴 애니메이션 */
 await Promise.all([
-animate(strips[0], -(ITEM_HEIGHT * 10), 1200),
-animate(strips[1], -(ITEM_HEIGHT * 12), 1500),
-animate(strips[2], -(ITEM_HEIGHT * 14), 1800)
+animate(strips[0], -(ITEM_HEIGHT * SPIN_ITEMS), 1200),
+animate(strips[1], -(ITEM_HEIGHT * SPIN_ITEMS), 1500),
+animate(strips[2], -(ITEM_HEIGHT * SPIN_ITEMS), 1800)
 ])
 
 await new Promise(r=>setTimeout(r,50))
 
 /* 배수 계산 */
-let multiplier=0
+let multiplier = 0
 
-if(results[0]===results[1] && results[1]===results[2]){
+const cherryCount = results.filter(s => s === "🍒").length
+
+/* 체리 보너스 */
+if (cherryCount > 0) {
+
+if (cherryCount === 3) multiplier = 5
+else if (cherryCount === 2) multiplier = 1
+else if (cherryCount === 1) multiplier = 0.5
+
+}
+
+/* 체리가 하나도 없을 때만 일반 배당 */
+else if(results[0]===results[1] && results[1]===results[2]){
 
 const s=results[0]
 
-if(s==="🍒") multiplier=3
-else if(s==="🍋") multiplier=5
-else if(s==="🍇") multiplier=8
-else if(s==="🍉") multiplier=12
-else if(s==="🔔") multiplier=18
-else if(s==="⭐") multiplier=22
-else if(s==="7️⃣") multiplier=25
+if(s==="🍋") multiplier=6
+else if(s==="🍇") multiplier=10
+else if(s==="🍉") multiplier=18
+else if(s==="🔔") multiplier=35
+else if(s==="⭐") multiplier=70
+else if(s==="7️⃣") multiplier=120
 
 }
 
