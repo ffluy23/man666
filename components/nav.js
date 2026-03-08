@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
     </div>
 
     <div class="nav-right">
-      💰 <span class="coin">0</span>
+      💰 <span class="coin">0</span>H
       <button onclick="logout()" class="logout-btn">로그아웃</button>
     </div>
 
