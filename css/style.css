@@ -37,7 +37,7 @@ body{
 
 /* 로그인 박스 */
 .logincontainer {
-    background: white;
+    background: #333;
     padding: 40px;
     width: 300px;
     border-radius: 10px;
