@@ -419,6 +419,28 @@ body{
   color:#e6c8ff;
 }
 
+#startBtn {
+  display:block;
+  margin:20px auto;
+  background:linear-gradient(180deg,#ff9de6,#ff6bcf);
+  color:#2a0f2a;
+  padding:14px 20px;
+  border:none;
+  border-radius:14px;
+  font-weight:700;
+  font-size: 18px;
+  width:100%;
+  cursor:pointer;
+  transition:.15s;
+  box-shadow:0 6px 15px rgba(255,120,220,0.4);
+}
+
+#startBtn:hover{
+  transform:translateY(-2px);
+  box-shadow:0 10px 20px rgba(255,120,220,0.6);
+}
+
+
 /* ===== 컵 영역 ===== */
 
 .lane{
