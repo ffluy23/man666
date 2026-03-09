@@ -1,13 +1,27 @@
 @font-face {
-    font-family: 'GabiaMaeumgyeol';
-    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2205@1.0/GabiaMaeumgyeol.woff2') format('woff2');
-    font-weight: normal;
+    font-family: 'DnfTemperedBlade';
+    src: url('//cdn.df.nexon.com/img/common/font/DNFForgedBlade-Light.otf') format('opentype');
+    font-weight: 300;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'DnfTemperedBlade';
+    src: url('//cdn.df.nexon.com/img/common/font/DNFForgedBlade-Medium.otf') format('opentype');
+    font-weight: 500;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'DnfTemperedBlade';
+    src: url('//cdn.df.nexon.com/img/common/font/DNFForgedBlade-Bold.otf') format('opentype');
+    font-weight: 700;
     font-display: swap;
 }
 
 body{
     margin:0;
-    font-family:'GabiaMaeumgyeol', sans-serif;
+    font-family:'DnfTemperedBlade', sans-serif;
     background:#030303;
 	color:#f5f5f5;
 }
@@ -34,7 +48,6 @@ body{
 /* 제목 */
 .logincontainer h2 {
     margin-bottom: 20px;
-	color:#333;
 }
 
 /* 입력창 */
@@ -330,15 +343,9 @@ body{
 /* 야바위 */
 
 /* 페이지 배경 */
-.shellgame-page{
-  background:linear-gradient(180deg,#1a1024,#0f0718);
-  font-family:"GabiaMaeumgyeol","Noto Sans KR",sans-serif;
-  color:white;
-}
-
 .shellgame-page .container{
   max-width:760px;
-  margin:auto;
+  margin: 16px auto;
   padding:30px;
   background:#1b1326;
   border-radius:20px;
@@ -394,6 +401,28 @@ body{
   transform:translateY(-2px);
   box-shadow:0 8px 16px rgba(255,120,220,0.6);
 }
+
+#startBtn {
+  display:block;
+  margin:20px auto;
+  background:linear-gradient(180deg,#ff9de6,#ff6bcf);
+  color:#2a0f2a;
+  padding:14px 20px;
+  border:none;
+  border-radius:14px;
+  font-weight:700;
+  font-size: 18px;
+  width:100%;
+  cursor:pointer;
+  transition:.15s;
+  box-shadow:0 6px 15px rgba(255,120,220,0.4);
+}
+
+#startBtn:hover{
+  transform:translateY(-2px);
+  box-shadow:0 10px 20px rgba(255,120,220,0.6);
+}
+
 
 /* ===== 정보 ===== */
 
