@@ -142,6 +142,10 @@ body{
 	
 }
 
+.casino-page h2{
+    text-align:center;
+}
+
 .game-tile{
     background:white;
     border-radius:10px;
