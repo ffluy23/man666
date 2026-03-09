@@ -48,6 +48,7 @@ body{
 /* 제목 */
 .logincontainer h2 {
     margin-bottom: 20px;
+	color:#333;
 }
 
 /* 입력창 */
